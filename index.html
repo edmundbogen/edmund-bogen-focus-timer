@@ -87,6 +87,11 @@
             box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4);
         }
 
+        .timer-button:focus {
+            outline: 2px solid #2196F3;
+            outline-offset: 2px;
+        }
+
         .inspiration-section {
             background: rgba(255, 255, 255, 0.05);
             border-radius: 15px;
@@ -156,6 +161,11 @@
             background: rgba(33, 150, 243, 0.2);
         }
 
+        .quiz-option:focus {
+            outline: 2px solid #2196F3;
+            outline-offset: 2px;
+        }
+
         .quiz-option.selected {
             border-color: #2196F3;
             background: rgba(33, 150, 243, 0.3);
@@ -184,6 +194,11 @@
             font-family: Arial, sans-serif;
             font-size: 14px;
             box-sizing: border-box;
+        }
+
+        .form-input:focus, .form-textarea:focus {
+            outline: 2px solid #2196F3;
+            outline-offset: 2px;
         }
 
         .form-textarea {
@@ -217,6 +232,11 @@
             accent-color: #2196F3;
         }
 
+        .task-checkbox:focus {
+            outline: 2px solid #2196F3;
+            outline-offset: 2px;
+        }
+
         .task-text {
             flex: 1;
             color: #ffffff;
@@ -237,6 +257,11 @@
             font-size: 10px;
             cursor: pointer;
             margin-left: 10px;
+        }
+
+        .task-delete:focus {
+            outline: 2px solid #ff4444;
+            outline-offset: 2px;
         }
 
         .button-group {
@@ -293,6 +318,83 @@
             margin-bottom: 10px;
         }
 
+        /* Toast notifications */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #2196F3;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.error {
+            background: #f44336;
+        }
+
+        /* Fallback modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1001;
+        }
+
+        .modal-content {
+            background: #1a1a2e;
+            border: 2px solid #2196F3;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            margin: 20px;
+        }
+
+        .modal-header {
+            color: #2196F3;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+        }
+
+        .modal-textarea {
+            width: 100%;
+            height: 200px;
+            padding: 10px;
+            border: 1px solid #2196F3;
+            border-radius: 8px;
+            background: rgba(33, 150, 243, 0.1);
+            color: white;
+            font-family: monospace;
+            font-size: 12px;
+            margin: 15px 0;
+        }
+
+        .modal-close {
+            background: #2196F3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            float: right;
+        }
+
         .footer {
             margin-top: 40px;
             text-align: center;
@@ -318,6 +420,16 @@
             .button-group {
                 flex-direction: column;
             }
+
+            .toast {
+                right: 10px;
+                left: 10px;
+                transform: translateY(-100px);
+            }
+
+            .toast.show {
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
@@ -333,7 +445,7 @@
     </div>
 
     <div class="timer-container">
-        <div class="timer-display" id="timerDisplay">25:00</div>
+        <div class="timer-display" id="timerDisplay" aria-live="polite">25:00</div>
         <button class="timer-button" id="startButton" onclick="startTimer()">Start Focus Session</button>
         <button class="timer-button" id="pauseButton" onclick="pauseTimer()" style="display:none;">Pause</button>
         <button class="timer-button" id="resetButton" onclick="resetTimer()">Reset</button>
@@ -385,11 +497,11 @@
         
         <div class="quiz-question" style="margin-top: 30px;">How would you rate your focus during this session?</div>
         <div class="quiz-options" id="quizOptions">
-            <div class="quiz-option" onclick="selectOption(this, 10)">10 - Laser focused, completed all planned tasks</div>
-            <div class="quiz-option" onclick="selectOption(this, 8)">8 - Highly focused, completed most tasks</div>
-            <div class="quiz-option" onclick="selectOption(this, 6)">6 - Good focus, made solid progress</div>
-            <div class="quiz-option" onclick="selectOption(this, 4)">4 - Moderate focus, some tasks completed</div>
-            <div class="quiz-option" onclick="selectOption(this, 2)">2 - Struggled to stay on task</div>
+            <div class="quiz-option" tabindex="0" onclick="selectOption(this, 10)" onkeypress="if(event.key==='Enter') selectOption(this, 10)">10 - Laser focused, completed all planned tasks</div>
+            <div class="quiz-option" tabindex="0" onclick="selectOption(this, 8)" onkeypress="if(event.key==='Enter') selectOption(this, 8)">8 - Highly focused, completed most tasks</div>
+            <div class="quiz-option" tabindex="0" onclick="selectOption(this, 6)" onkeypress="if(event.key==='Enter') selectOption(this, 6)">6 - Good focus, made solid progress</div>
+            <div class="quiz-option" tabindex="0" onclick="selectOption(this, 4)" onkeypress="if(event.key==='Enter') selectOption(this, 4)">4 - Moderate focus, some tasks completed</div>
+            <div class="quiz-option" tabindex="0" onclick="selectOption(this, 2)" onkeypress="if(event.key==='Enter') selectOption(this, 2)">2 - Struggled to stay on task</div>
         </div>
         
         <div class="form-group">
@@ -440,13 +552,26 @@
         <p><strong>Monthly Growth:</strong> Celebrate improvements in your average focus score. This metric directly correlates with your professional results and personal satisfaction.</p>
     </div>
 
+    <!-- Toast notification container -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Fallback modal -->
+    <div id="fallbackModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">📧 Email Report</div>
+            <p>Your email app didn't open automatically. Copy the report below and paste it into your email to edmund@bogenhomes.com:</p>
+            <textarea id="modalTextarea" class="modal-textarea" readonly></textarea>
+            <button class="modal-close" onclick="closeFallbackModal()">Close</button>
+        </div>
+    </div>
+
     <div class="footer">
         <p>Built with focus and intention by Edmund Bogen | <a href="http://www.bogenhomes.com" style="color: #2196F3;">BogenHomes.com</a></p>
         <p>Transform your productivity. Master your focus. Achieve extraordinary results.</p>
     </div>
 
     <script type="text/javascript">
-        /* Edmund Bogen Focus Timer - Version 2.0 */
+        /* Edmund Bogen Focus Timer - Version 2.2 - Security & Reliability Hardened */
         
         var timerInterval;
         var timeLeft = 1500;
@@ -454,6 +579,13 @@
         var startTime = null;
         var selectedScore = 0;
         var tasks = [];
+        
+        // Shared AudioContext for performance
+        var audioContext = null;
+        
+        // Speech synthesis retry state
+        var speechRetryCount = 0;
+        var selectedVoice = null;
 
         function initApp() {
             loadData();
@@ -461,6 +593,9 @@
             updateDisplay();
             updateStats();
             hideCompletion();
+            requestNotificationPermission();
+            initializeAudioContext();
+            initializeSpeechSynthesis();
         }
 
         function startTimer() {
@@ -484,7 +619,7 @@
                 if (timeLeft == 0) {
                     completeSession();
                 }
-            }, 1000);
+            }, 250); // Smoother UI updates
         }
 
         function pauseTimer() {
@@ -551,12 +686,169 @@
             document.getElementById('sessionComplete').style.display = 'none';
         }
 
+        // Audio Functions - Improved with shared AudioContext
+        function initializeAudioContext() {
+            try {
+                if (!audioContext) {
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                }
+            } catch (e) {
+                console.log('AudioContext not supported');
+                audioContext = null;
+            }
+        }
+
+        function playAlert() {
+            if (!audioContext) {
+                initializeAudioContext();
+                if (!audioContext) return;
+            }
+            
+            try {
+                // Resume context if suspended (required by some browsers)
+                if (audioContext.state === 'suspended') {
+                    audioContext.resume();
+                }
+                
+                // First ding (higher pitch)
+                var oscillator1 = audioContext.createOscillator();
+                var gainNode1 = audioContext.createGain();
+                
+                oscillator1.connect(gainNode1);
+                gainNode1.connect(audioContext.destination);
+                
+                oscillator1.frequency.setValueAtTime(800, audioContext.currentTime);
+                gainNode1.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode1.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+                
+                oscillator1.start(audioContext.currentTime);
+                oscillator1.stop(audioContext.currentTime + 0.5);
+                
+                // Second dong (lower pitch, delayed)
+                var oscillator2 = audioContext.createOscillator();
+                var gainNode2 = audioContext.createGain();
+                
+                oscillator2.connect(gainNode2);
+                gainNode2.connect(audioContext.destination);
+                
+                oscillator2.frequency.setValueAtTime(600, audioContext.currentTime + 0.6);
+                gainNode2.gain.setValueAtTime(0.3, audioContext.currentTime + 0.6);
+                gainNode2.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 1.2);
+                
+                oscillator2.start(audioContext.currentTime + 0.6);
+                oscillator2.stop(audioContext.currentTime + 1.2);
+                
+            } catch (e) {
+                console.log('Audio playback failed:', e);
+            }
+        }
+
+        // Speech Synthesis - Improved with retry mechanism
+        function initializeSpeechSynthesis() {
+            if (!('speechSynthesis' in window)) return;
+            
+            // Try to get voices immediately
+            selectBestVoice();
+            
+            // Set up event listener for when voices become available
+            if (speechSynthesis.onvoiceschanged !== undefined) {
+                speechSynthesis.onvoiceschanged = function() {
+                    selectBestVoice();
+                };
+            }
+        }
+
+        function selectBestVoice() {
+            if (!('speechSynthesis' in window)) return;
+            
+            var voices = speechSynthesis.getVoices();
+            if (voices.length === 0) {
+                // Voices not loaded yet, will retry via onvoiceschanged
+                return;
+            }
+            
+            // Look for preferred voices
+            selectedVoice = voices.find(function(voice) {
+                var name = voice.name.toLowerCase();
+                return name.includes('female') || 
+                       name.includes('samantha') ||
+                       name.includes('victoria') ||
+                       name.includes('karen');
+            });
+            
+            // Fallback to any English voice
+            if (!selectedVoice) {
+                selectedVoice = voices.find(function(voice) {
+                    return voice.lang.startsWith('en');
+                });
+            }
+            
+            // Ultimate fallback to first available voice
+            if (!selectedVoice && voices.length > 0) {
+                selectedVoice = voices[0];
+            }
+        }
+
+        function speakMessage() {
+            if (!('speechSynthesis' in window)) return;
+            
+            var message = "Good job! Remember to write out what you accomplished and send it to Edmund.";
+            var utterance = new SpeechSynthesisUtterance(message);
+            
+            // Configure voice settings
+            utterance.rate = 0.8;
+            utterance.pitch = 1.0;
+            utterance.volume = 0.8;
+            
+            // Use selected voice if available
+            if (selectedVoice) {
+                utterance.voice = selectedVoice;
+            }
+            
+            // Add delay after the ding dong sound
+            setTimeout(function() {
+                try {
+                    speechSynthesis.speak(utterance);
+                } catch (e) {
+                    console.log('Speech synthesis failed:', e);
+                }
+            }, 1500);
+        }
+
+        function showNotification() {
+            if (!('Notification' in window)) return;
+            
+            if (Notification.permission === 'granted') {
+                try {
+                    new Notification('Focus Session Complete! 🎉', {
+                        body: 'Great work! Time to reflect on your accomplishments.',
+                        silent: false,
+                        requireInteraction: false
+                    });
+                } catch (e) {
+                    console.log('Notification failed:', e);
+                }
+            }
+        }
+
+        function requestNotificationPermission() {
+            if (!('Notification' in window)) return;
+            
+            if (Notification.permission === 'default') {
+                Notification.requestPermission().then(function(permission) {
+                    console.log('Notification permission:', permission);
+                }).catch(function(e) {
+                    console.log('Notification permission request failed:', e);
+                });
+            }
+        }
+
         function addTask() {
             var input = document.getElementById('newTaskInput');
-            var taskText = input.value;
+            var taskText = input.value.trim();
             
             if (!taskText || taskText.length == 0) {
-                alert('Please enter a task description.');
+                showToast('Please enter a task description.', true);
                 return;
             }
             
@@ -595,11 +887,18 @@
             saveTasks();
         }
 
+        // XSS-safe task rendering
         function renderTasks() {
             var container = document.getElementById('taskList');
             
+            // Clear existing content
+            container.innerHTML = '';
+            
             if (tasks.length == 0) {
-                container.innerHTML = '<div style="text-align: center; color: #888; padding: 20px;">No tasks added yet. Add your first task to get started!</div>';
+                var emptyDiv = document.createElement('div');
+                emptyDiv.style.cssText = 'text-align: center; color: #888; padding: 20px;';
+                emptyDiv.textContent = 'No tasks added yet. Add your first task to get started!';
+                container.appendChild(emptyDiv);
                 return;
             }
             
@@ -609,24 +908,46 @@
             }
             var totalCount = tasks.length;
             
-            var html = '';
+            // Render each task safely
             for (var i = 0; i < tasks.length; i++) {
                 var task = tasks[i];
-                html += '<div class="task-item">';
-                html += '<input type="checkbox" class="task-checkbox" ' + (task.completed ? 'checked' : '') + ' onchange="toggleTask(' + task.id + ')">';
-                html += '<span class="task-text ' + (task.completed ? 'completed' : '') + '">' + task.text + '</span>';
-                html += '<button class="task-delete" onclick="deleteTask(' + task.id + ')">×</button>';
-                html += '</div>';
+                
+                var taskDiv = document.createElement('div');
+                taskDiv.className = 'task-item';
+                
+                var checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.className = 'task-checkbox';
+                checkbox.checked = task.completed;
+                checkbox.onchange = (function(id) {
+                    return function() { toggleTask(id); };
+                })(task.id);
+                
+                var textSpan = document.createElement('span');
+                textSpan.className = 'task-text' + (task.completed ? ' completed' : '');
+                textSpan.textContent = task.text; // XSS-safe text content
+                
+                var deleteBtn = document.createElement('button');
+                deleteBtn.className = 'task-delete';
+                deleteBtn.textContent = '×';
+                deleteBtn.onclick = (function(id) {
+                    return function() { deleteTask(id); };
+                })(task.id);
+                
+                taskDiv.appendChild(checkbox);
+                taskDiv.appendChild(textSpan);
+                taskDiv.appendChild(deleteBtn);
+                container.appendChild(taskDiv);
             }
             
-            html += '<div style="margin-top: 10px; padding: 10px; background: rgba(33, 150, 243, 0.1); border-radius: 6px; font-size: 12px; color: #2196F3; text-align: center;">';
-            html += 'Progress: ' + completedCount + '/' + totalCount + ' tasks completed';
+            // Add progress summary
+            var progressDiv = document.createElement('div');
+            progressDiv.style.cssText = 'margin-top: 10px; padding: 10px; background: rgba(33, 150, 243, 0.1); border-radius: 6px; font-size: 12px; color: #2196F3; text-align: center;';
+            progressDiv.textContent = 'Progress: ' + completedCount + '/' + totalCount + ' tasks completed';
             if (totalCount > 0) {
-                html += ' (' + Math.round(completedCount / totalCount * 100) + '%)';
+                progressDiv.textContent += ' (' + Math.round(completedCount / totalCount * 100) + '%)';
             }
-            html += '</div>';
-            
-            container.innerHTML = html;
+            container.appendChild(progressDiv);
         }
 
         function selectOption(element, score) {
@@ -641,7 +962,7 @@
 
         function submitSession() {
             if (selectedScore == 0) {
-                alert('Please select a focus rating before submitting.');
+                showToast('Please select a focus rating before submitting.', true);
                 return;
             }
 
@@ -651,31 +972,55 @@
             sendEmail(sessionData);
             resetForm();
             
-            alert('Session recorded! Focus score: ' + sessionData.focusScore + '/10');
+            showToast('Session recorded! Focus score: ' + sessionData.focusScore + '/10');
         }
 
+        // Modern clipboard API with fallback
         function copyReport() {
             if (selectedScore == 0) {
-                alert('Please complete the focus rating first.');
+                showToast('Please complete the focus rating first.', true);
                 return;
             }
 
             var sessionData = gatherSessionData();
             var report = formatReport(sessionData);
             
-            var textArea = document.createElement('textarea');
-            textArea.value = report;
-            document.body.appendChild(textArea);
-            textArea.select();
-            
-            try {
-                document.execCommand('copy');
-                alert('Report copied to clipboard!');
-            } catch (e) {
-                alert('Please copy the report manually.');
+            // Try modern Clipboard API first
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(report).then(function() {
+                    showToast('Report copied to clipboard!');
+                }).catch(function(err) {
+                    console.log('Clipboard API failed:', err);
+                    fallbackCopy(report);
+                });
+            } else {
+                fallbackCopy(report);
             }
-            
-            document.body.removeChild(textArea);
+        }
+
+        function fallbackCopy(text) {
+            try {
+                var textArea = document.createElement('textarea');
+                textArea.value = text;
+                textArea.style.cssText = 'position: fixed; top: -1000px; left: -1000px;';
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                
+                var successful = document.execCommand('copy');
+                document.body.removeChild(textArea);
+                
+                if (successful) {
+                    showToast('Report copied to clipboard!');
+                } else {
+                    showToast('⚠️ Copy blocked by browser. Report text selected below - press Ctrl+C (Cmd+C on Mac) to copy.', true);
+                    showFallbackModal(text);
+                }
+            } catch (err) {
+                console.log('Fallback copy failed:', err);
+                showToast('Copy failed. Showing report text to copy manually.', true);
+                showFallbackModal(text);
+            }
         }
 
         function gatherSessionData() {
@@ -763,11 +1108,25 @@
             return report;
         }
 
+        // Improved email sending with fallback
         function sendEmail(data) {
             var subject = 'Focus Session Report - ' + data.date;
             var body = formatReport(data);
             var mailtoLink = 'mailto:edmund@bogenhomes.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
-            window.open(mailtoLink);
+            
+            try {
+                // Use location.href instead of window.open for better compatibility
+                location.href = mailtoLink;
+                
+                // Show fallback modal after a delay if email didn't open
+                setTimeout(function() {
+                    showFallbackModal(body, true);
+                }, 2000);
+                
+            } catch (e) {
+                console.log('Email sending failed:', e);
+                showFallbackModal(body, true);
+            }
         }
 
         function resetForm() {
@@ -790,6 +1149,7 @@
                     }
                 }
             } catch (e) {
+                console.log('Error loading tasks:', e);
                 tasks = [];
             }
         }
@@ -798,7 +1158,7 @@
             try {
                 localStorage.setItem('focusTimerTasks', JSON.stringify(tasks));
             } catch (e) {
-                // Silent fail
+                console.log('Error saving tasks:', e);
             }
         }
 
@@ -808,7 +1168,7 @@
                 sessions.push(sessionData);
                 localStorage.setItem('focusSessions', JSON.stringify(sessions));
             } catch (e) {
-                // Silent fail
+                console.log('Error saving session:', e);
             }
         }
 
@@ -818,6 +1178,7 @@
                 var sessions = data ? JSON.parse(data) : [];
                 return (sessions && typeof sessions.length != 'undefined') ? sessions : [];
             } catch (e) {
+                console.log('Error loading sessions:', e);
                 return [];
             }
         }
@@ -887,6 +1248,59 @@
             
             return streak;
         }
+
+        // Toast notification system
+        function showToast(message, isError) {
+            var toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'toast' + (isError ? ' error' : '');
+            
+            // Show toast
+            setTimeout(function() {
+                toast.classList.add('show');
+            }, 100);
+            
+            // Hide toast after 4 seconds
+            setTimeout(function() {
+                toast.classList.remove('show');
+            }, 4000);
+        }
+
+        // Fallback modal for clipboard/email failures
+        function showFallbackModal(text, isEmailFallback) {
+            var modal = document.getElementById('fallbackModal');
+            var textarea = document.getElementById('modalTextarea');
+            var header = modal.querySelector('.modal-header');
+            var description = modal.querySelector('p');
+            
+            if (isEmailFallback) {
+                header.textContent = '📧 Email Report';
+                description.textContent = 'Your email app didn\'t open automatically. Copy the report below and paste it into your email to edmund@bogenhomes.com:';
+            } else {
+                header.textContent = '📋 Copy Report';
+                description.textContent = 'Copy the report below:';
+            }
+            
+            textarea.value = text;
+            modal.style.display = 'flex';
+            
+            // Auto-select text for easy copying
+            setTimeout(function() {
+                textarea.select();
+                textarea.focus();
+            }, 100);
+        }
+
+        function closeFallbackModal() {
+            document.getElementById('fallbackModal').style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('fallbackModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeFallbackModal();
+            }
+        });
 
         // Initialize when DOM is ready
         if (document.addEventListener) {
