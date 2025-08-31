@@ -12,7 +12,7 @@
         }
 
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: Arial, sans-serif;
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             color: #ffffff;
             min-height: 100vh;
@@ -87,12 +87,6 @@
             box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4);
         }
 
-        .timer-button:disabled {
-            background: #666;
-            cursor: not-allowed;
-            transform: none;
-        }
-
         .inspiration-section {
             background: rgba(255, 255, 255, 0.05);
             border-radius: 15px;
@@ -134,7 +128,6 @@
             padding: 30px;
             margin: 20px 0;
             max-width: 600px;
-            display: block;
         }
 
         .quiz-question {
@@ -168,6 +161,96 @@
             background: rgba(33, 150, 243, 0.3);
         }
 
+        .form-group {
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .form-label {
+            display: block;
+            color: #2196F3;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .form-input, .form-textarea {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 2px solid #2196F3;
+            background: rgba(33, 150, 243, 0.1);
+            color: white;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .form-textarea {
+            height: 120px;
+            resize: vertical;
+        }
+
+        .task-list {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid rgba(33, 150, 243, 0.3);
+            border-radius: 8px;
+            padding: 10px;
+            background: rgba(33, 150, 243, 0.05);
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .task-item:last-child {
+            border-bottom: none;
+        }
+
+        .task-checkbox {
+            margin-right: 10px;
+            transform: scale(1.2);
+            accent-color: #2196F3;
+        }
+
+        .task-text {
+            flex: 1;
+            color: #ffffff;
+            font-size: 14px;
+        }
+
+        .task-text.completed {
+            text-decoration: line-through;
+            color: #888;
+        }
+
+        .task-delete {
+            background: #ff4444;
+            border: none;
+            color: white;
+            border-radius: 3px;
+            padding: 2px 6px;
+            font-size: 10px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .button-group {
+            margin-top: 25px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .copy-button {
+            background: linear-gradient(45deg, #FF9800, #F57C00);
+        }
+
         .progress-tracker {
             background: rgba(255, 255, 255, 0.05);
             border-radius: 15px;
@@ -196,6 +279,20 @@
             font-weight: bold;
         }
 
+        .session-complete {
+            background: linear-gradient(45deg, #2196F3, #1976D2);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            display: none;
+        }
+
+        .celebration {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
         .footer {
             margin-top: 40px;
             text-align: center;
@@ -217,20 +314,10 @@
             .logo {
                 font-size: 2rem;
             }
-        }
 
-        .session-complete {
-            background: linear-gradient(45deg, #2196F3, #1976D2);
-            border-radius: 15px;
-            padding: 20px;
-            margin: 20px 0;
-            text-align: center;
-            display: none;
-        }
-
-        .celebration {
-            font-size: 2rem;
-            margin-bottom: 10px;
+            .button-group {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
@@ -282,41 +369,44 @@
     </div>
 
     <div class="quiz-container" id="quizContainer">
-        <h3 class="inspiration-title">Focus Session Assessment</h3>
+        <h3 class="inspiration-title">Focus Session Planning & Assessment</h3>
         
-        <div class="quiz-question" id="quizQuestion">How would you rate your focus during this session?</div>
+        <div class="form-group">
+            <label class="form-label">📋 Tasks for this 25-minute session:</label>
+            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                <input type="text" class="form-input" id="newTaskInput" 
+                    placeholder="Add a specific task or goal..." 
+                    style="flex: 1;" onkeypress="if(event.key==='Enter') addTask()">
+                <button class="timer-button" onclick="addTask()" 
+                    style="min-width: 80px; padding: 8px 16px; margin: 0;">Add</button>
+            </div>
+            <div id="taskList" class="task-list"></div>
+        </div>
+        
+        <div class="quiz-question" style="margin-top: 30px;">How would you rate your focus during this session?</div>
         <div class="quiz-options" id="quizOptions">
-            <div class="quiz-option" onclick="selectOption(this, 10)">10 - Laser focused, completely immersed</div>
-            <div class="quiz-option" onclick="selectOption(this, 8)">8 - Highly focused with minimal distractions</div>
-            <div class="quiz-option" onclick="selectOption(this, 6)">6 - Good focus with some wandering</div>
-            <div class="quiz-option" onclick="selectOption(this, 4)">4 - Moderate focus, several distractions</div>
-            <div class="quiz-option" onclick="selectOption(this, 2)">2 - Struggled to maintain focus</div>
+            <div class="quiz-option" onclick="selectOption(this, 10)">10 - Laser focused, completed all planned tasks</div>
+            <div class="quiz-option" onclick="selectOption(this, 8)">8 - Highly focused, completed most tasks</div>
+            <div class="quiz-option" onclick="selectOption(this, 6)">6 - Good focus, made solid progress</div>
+            <div class="quiz-option" onclick="selectOption(this, 4)">4 - Moderate focus, some tasks completed</div>
+            <div class="quiz-option" onclick="selectOption(this, 2)">2 - Struggled to stay on task</div>
         </div>
         
-        <div style="margin-top: 25px;">
-            <div style="color: #2196F3; font-weight: bold; margin-bottom: 10px; font-size: 1.1rem;">What did you accomplish in this session?</div>
-            <textarea id="accomplishments" 
-                placeholder="Describe what you completed, decisions made, or progress achieved..." 
-                style="width: 100%; height: 120px; padding: 12px; border-radius: 8px; 
-                border: 2px solid #2196F3; background: rgba(33, 150, 243, 0.1); 
-                color: white; font-family: Arial, sans-serif; font-size: 14px; 
-                box-sizing: border-box; resize: vertical;">
-            </textarea>
+        <div class="form-group">
+            <label class="form-label" for="accomplishments">Additional accomplishments or insights:</label>
+            <textarea class="form-textarea" id="accomplishments" 
+                placeholder="Any additional progress, decisions made, or insights gained..."></textarea>
         </div>
         
-        <div style="margin-top: 20px;">
-            <div style="color: #2196F3; font-weight: bold; margin-bottom: 10px; font-size: 1.1rem;">Your email (optional):</div>
-            <input type="email" id="userEmail" 
-                placeholder="your.email@example.com" 
-                style="width: 100%; padding: 12px; border-radius: 8px; 
-                border: 2px solid #2196F3; background: rgba(33, 150, 243, 0.1); 
-                color: white; font-family: Arial, sans-serif; font-size: 14px; 
-                box-sizing: border-box;"/>
+        <div class="form-group">
+            <label class="form-label" for="userEmail">Your email (optional):</label>
+            <input type="email" class="form-input" id="userEmail" 
+                placeholder="your.email@example.com" />
         </div>
         
-        <div style="margin-top: 25px;">
-            <button class="timer-button" onclick="submitQuiz()">Record & Share Session</button>
-            <button class="timer-button" onclick="copyToClipboard()" style="background: linear-gradient(45deg, #FF9800, #F57C00);">Copy Report</button>
+        <div class="button-group">
+            <button class="timer-button" onclick="submitSession()">Record & Share Session</button>
+            <button class="timer-button copy-button" onclick="copyReport()">Copy Report</button>
         </div>
     </div>
 
@@ -355,244 +445,458 @@
         <p>Transform your productivity. Master your focus. Achieve extraordinary results.</p>
     </div>
 
-    <script>
-        let timerInterval;
-        let timeLeft = 1500; // 25 minutes in seconds
-        let isRunning = false;
+    <script type="text/javascript">
+        /* Edmund Bogen Focus Timer - Version 2.0 */
         
-        // Fix corrupted localStorage data
-        let sessions;
-        try {
-            sessions = JSON.parse(localStorage.getItem('focusSessions')) || [];
-            // Ensure it's an array
-            if (!Array.isArray(sessions)) {
-                sessions = [];
-                localStorage.setItem('focusSessions', JSON.stringify(sessions));
-            }
-        } catch (e) {
-            // If localStorage is corrupted, start fresh
-            sessions = [];
-            localStorage.setItem('focusSessions', JSON.stringify(sessions));
-        }
-        
-        let todaysSessions = sessions.filter(s => s.date === new Date().toDateString()).length;
+        var timerInterval;
+        var timeLeft = 1500;
+        var isRunning = false;
+        var startTime = null;
+        var selectedScore = 0;
+        var tasks = [];
 
-        // Update display on load
-        updateStats();
-
-        function updateDisplay() {
-            const minutes = Math.floor(timeLeft / 60);
-            const seconds = timeLeft % 60;
-            document.getElementById('timerDisplay').textContent = 
-                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        function initApp() {
+            loadData();
+            renderTasks();
+            updateDisplay();
+            updateStats();
+            hideCompletion();
         }
 
         function startTimer() {
+            if (isRunning) return;
+            
             isRunning = true;
+            startTime = new Date().getTime() - (1500 - timeLeft) * 1000;
+            
             document.getElementById('startButton').style.display = 'none';
             document.getElementById('pauseButton').style.display = 'inline-block';
-            document.getElementById('sessionComplete').style.display = 'none';
-            document.getElementById('quizContainer').style.display = 'none';
+            hideCompletion();
             
-            timerInterval = setInterval(() => {
-                timeLeft--;
+            timerInterval = setInterval(function() {
+                if (!isRunning) return;
+                
+                var elapsed = Math.floor((new Date().getTime() - startTime) / 1000);
+                timeLeft = Math.max(0, 1500 - elapsed);
+                
                 updateDisplay();
                 
-                if (timeLeft <= 0) {
+                if (timeLeft == 0) {
                     completeSession();
                 }
             }, 1000);
         }
 
         function pauseTimer() {
+            if (!isRunning) return;
+            
             isRunning = false;
             clearInterval(timerInterval);
+            
             document.getElementById('startButton').style.display = 'inline-block';
             document.getElementById('pauseButton').style.display = 'none';
-            document.getElementById('startButton').textContent = 'Resume';
+            document.getElementById('startButton').innerHTML = 'Resume';
         }
 
         function resetTimer() {
             isRunning = false;
             clearInterval(timerInterval);
             timeLeft = 1500;
+            startTime = null;
+            
             updateDisplay();
             document.getElementById('startButton').style.display = 'inline-block';
             document.getElementById('pauseButton').style.display = 'none';
-            document.getElementById('startButton').textContent = 'Start Focus Session';
-            document.getElementById('sessionComplete').style.display = 'none';
-            document.getElementById('quizContainer').style.display = 'none';
+            document.getElementById('startButton').innerHTML = 'Start Focus Session';
+            hideCompletion();
         }
 
         function completeSession() {
             isRunning = false;
             clearInterval(timerInterval);
+            startTime = null;
+            
             document.getElementById('startButton').style.display = 'inline-block';
             document.getElementById('pauseButton').style.display = 'none';
-            document.getElementById('startButton').textContent = 'Start New Session';
-            document.getElementById('sessionComplete').style.display = 'block';
-            document.getElementById('quizContainer').style.display = 'block';
+            document.getElementById('startButton').innerHTML = 'Start New Session';
             
-            // Play completion sound (if browser allows)
-            try {
-                const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBT2P4fPOeSYGLIHO8tiJNwgZaLvt559NEAxRqOLwtmMcBjiS1/LNeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBT2P4fPOeSYGLIHO8tiJNwgZZ7zs56RLEQxQp+PwuWMcBjiR1/LMeywGI3bH8N+PQgoTXrTp66hVFApGnt/yvmwhBT2P4fPOeSYFLYDO8tiKOQgZZ7vs56RLEQxPpuPwuWQdBjiR1/LMeywGI3bH8N+PQgoTXrTp66hVFApGnt/yv2whBT2P4fPOeSYFLYDO8tiKOQgZZ7vs56NLEAxQp+LwumQdBjmQ1/LNeSsGJXfH8N+QQAoTX7Tp66hUFAhGn9/yv2whBT2P4fPOeSYGK4DO8tiKOQgZZ7vs56NLEAxPpuPwumQdBjmQ1/LNeSsGJXfH8N+QQAoTX7Tp66hUFAhGn9/yv2whBT2P4fPOeSYGK4DO8tiKOQgZZ7vs56NLEAxPpuPwumQdBjmQ1/LNeSsGJXfH8N+QQAoTX7Tp66hUFAhGn9/yv2whBT2P4fPOeSYGK4DO8tiKOQgZZ7vs56NLEAxPpuPwumQdBjmQ1/LNeSsGJXfH8N+QQAoTX7Tp66hUFAhGn9/yv2whBT2P4fPOeSYGK4DO8tiKOQgZZ7vs56NLEAxPpuPwumQdBjmQ1/LNeSsGJXfH8N+QQAoTX7Tp66hUFAhGn9/yv2whBT2P4fPOeSYGK4DO8tiKOQgZZ7vs56NLEAxPpuPwumQdBjmQ1/LNeSsGJXfH8N+QQAoTX7Tp66hUFAhGn9/yv2whBT2P4fPOeSYGK4DO8tiKOQgZZ7vs56NLEAxPpuPwumQdBjmQ1/LNeSsGJXfH8N+QQAoTX7Tp66hUFAhGn9/yv2whBT2P4fPOeSYGK4DO8tiKOQgZZ7vs56NLEAxPpuPwumQdBjmQ1/LNeSsGJXfH8N+QQAoTX7Tp66hUFAhGn9/yv2whBT2P4fPOeSYGK4DO8tiKOQgZZ7vs56NLEAxPpuPwumQdBjmQ1/LNeSsGJXfH8N+QQAoTX7Tp66hUFAhGn9/yv2whBT2P4fPOeSYGK4DO8tiKOQgZZ7vs56NLEAxPpuPwumQdBjmQ1/LNeSsGJXfH8N+QQAoTX7Tp66hUFAhGn9/yv2whBT2P4fPOeSYGK4DO8tiKOQgZZ7vs56NLEAxPpuPwumQdBjmQ1/LNeSsGJXfH8N+QQAoTX7Tp66hUFAhGn9/yv2whBT2P4fPOeSYGK4DO8tiKOQgZZrvs56NLXEM=');
-                audio.play();
-            } catch (e) {
-                // Silent fail if audio doesn't work
-            }
+            showCompletion();
             
-            timeLeft = 1500; // Reset for next session
+            timeLeft = 1500;
             updateDisplay();
         }
 
-        let selectedScore = 0;
+        function updateDisplay() {
+            var minutes = Math.floor(timeLeft / 60);
+            var seconds = timeLeft % 60;
+            var timeString = (minutes < 10 ? '0' : '') + minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+            
+            document.getElementById('timerDisplay').innerHTML = timeString;
+            
+            if (isRunning) {
+                document.title = timeString + ' - Edmund Bogen Focus Timer';
+            } else {
+                document.title = 'Edmund Bogen Focus Timer - Master Your Productivity';
+            }
+        }
+
+        function showCompletion() {
+            document.getElementById('sessionComplete').style.display = 'block';
+        }
+
+        function hideCompletion() {
+            document.getElementById('sessionComplete').style.display = 'none';
+        }
+
+        function addTask() {
+            var input = document.getElementById('newTaskInput');
+            var taskText = input.value;
+            
+            if (!taskText || taskText.length == 0) {
+                alert('Please enter a task description.');
+                return;
+            }
+            
+            var task = {
+                id: new Date().getTime(),
+                text: taskText,
+                completed: false
+            };
+            
+            tasks.push(task);
+            input.value = '';
+            renderTasks();
+            saveTasks();
+        }
+
+        function toggleTask(taskId) {
+            for (var i = 0; i < tasks.length; i++) {
+                if (tasks[i].id == taskId) {
+                    tasks[i].completed = !tasks[i].completed;
+                    break;
+                }
+            }
+            renderTasks();
+            saveTasks();
+        }
+
+        function deleteTask(taskId) {
+            var newTasks = [];
+            for (var i = 0; i < tasks.length; i++) {
+                if (tasks[i].id != taskId) {
+                    newTasks.push(tasks[i]);
+                }
+            }
+            tasks = newTasks;
+            renderTasks();
+            saveTasks();
+        }
+
+        function renderTasks() {
+            var container = document.getElementById('taskList');
+            
+            if (tasks.length == 0) {
+                container.innerHTML = '<div style="text-align: center; color: #888; padding: 20px;">No tasks added yet. Add your first task to get started!</div>';
+                return;
+            }
+            
+            var completedCount = 0;
+            for (var i = 0; i < tasks.length; i++) {
+                if (tasks[i].completed) completedCount++;
+            }
+            var totalCount = tasks.length;
+            
+            var html = '';
+            for (var i = 0; i < tasks.length; i++) {
+                var task = tasks[i];
+                html += '<div class="task-item">';
+                html += '<input type="checkbox" class="task-checkbox" ' + (task.completed ? 'checked' : '') + ' onchange="toggleTask(' + task.id + ')">';
+                html += '<span class="task-text ' + (task.completed ? 'completed' : '') + '">' + task.text + '</span>';
+                html += '<button class="task-delete" onclick="deleteTask(' + task.id + ')">×</button>';
+                html += '</div>';
+            }
+            
+            html += '<div style="margin-top: 10px; padding: 10px; background: rgba(33, 150, 243, 0.1); border-radius: 6px; font-size: 12px; color: #2196F3; text-align: center;">';
+            html += 'Progress: ' + completedCount + '/' + totalCount + ' tasks completed';
+            if (totalCount > 0) {
+                html += ' (' + Math.round(completedCount / totalCount * 100) + '%)';
+            }
+            html += '</div>';
+            
+            container.innerHTML = html;
+        }
 
         function selectOption(element, score) {
-            // Remove previous selections
-            document.querySelectorAll('.quiz-option').forEach(opt => {
-                opt.classList.remove('selected');
-            });
+            var options = document.getElementsByClassName('quiz-option');
+            for (var i = 0; i < options.length; i++) {
+                options[i].className = 'quiz-option';
+            }
             
-            // Select current option
-            element.classList.add('selected');
+            element.className = 'quiz-option selected';
             selectedScore = score;
         }
 
-        function submitQuiz() {
-            if (selectedScore === 0) {
+        function submitSession() {
+            if (selectedScore == 0) {
                 alert('Please select a focus rating before submitting.');
                 return;
             }
 
-            const accomplishments = document.getElementById('accomplishments').value;
-            const userEmail = document.getElementById('userEmail').value;
-
-            // Save session data
-            const sessionData = {
-                date: new Date().toDateString(),
-                timestamp: new Date(),
-                focusScore: selectedScore,
-                duration: 25,
-                accomplishments: accomplishments,
-                email: userEmail
-            };
-
-            sessions.push(sessionData);
-            localStorage.setItem('focusSessions', JSON.stringify(sessions));
-            
-            // Create email report
-            const emailSubject = `Focus Session Report - ${sessionData.date}`;
-            const emailBody = `Hi Edmund,
-
-I just completed a 25-minute focus session using your Pomodoro timer:
-
-📊 SESSION DETAILS:
-• Date: ${sessionData.date}
-• Focus Score: ${sessionData.focusScore}/10
-• Duration: 25 minutes
-
-🎯 ACCOMPLISHMENTS:
-${accomplishments || 'No specific accomplishments noted'}
-
-${userEmail ? `📧 Contact: ${userEmail}` : ''}
-
-Best regards from your Focus Timer app!
-
----
-Generated by Edmund Bogen's Focus Timer
-www.bogenhomes.com`;
-
-            // Open email client
-            const mailtoLink = `mailto:edmund@bogenhomes.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
-            window.open(mailtoLink);
-            
-            // Update stats
+            var sessionData = gatherSessionData();
+            saveSession(sessionData);
             updateStats();
+            sendEmail(sessionData);
+            resetForm();
             
-            // Hide quiz and show thank you
-            document.getElementById('quizContainer').style.display = 'none';
-            
-            // Reset form
-            selectedScore = 0;
-            document.getElementById('accomplishments').value = '';
-            document.getElementById('userEmail').value = '';
-            document.querySelectorAll('.quiz-option').forEach(opt => {
-                opt.classList.remove('selected');
-            });
-            
-            alert(`Session recorded! Report opened in your email client. Focus score: ${sessionData.focusScore}/10`);
+            alert('Session recorded! Focus score: ' + sessionData.focusScore + '/10');
         }
 
-        function copyToClipboard() {
-            if (selectedScore === 0) {
+        function copyReport() {
+            if (selectedScore == 0) {
                 alert('Please complete the focus rating first.');
                 return;
             }
 
-            const accomplishments = document.getElementById('accomplishments').value;
-            const userEmail = document.getElementById('userEmail').value;
+            var sessionData = gatherSessionData();
+            var report = formatReport(sessionData);
             
-            const reportText = `FOCUS SESSION REPORT - ${new Date().toDateString()}
-
-📊 SESSION METRICS:
-• Focus Score: ${selectedScore}/10
-• Duration: 25 minutes
-• Date: ${new Date().toLocaleDateString()}
-
-🎯 ACCOMPLISHMENTS:
-${accomplishments || 'No specific accomplishments noted'}
-
-${userEmail ? `📧 Contact: ${userEmail}` : ''}
-
-Generated by Edmund Bogen's Focus Timer`;
-
-            navigator.clipboard.writeText(reportText).then(() => {
-                alert('Report copied to clipboard! You can paste it into an email, text message, or document.');
-            }).catch(() => {
-                // Fallback for older browsers
-                const textArea = document.createElement('textarea');
-                textArea.value = reportText;
-                document.body.appendChild(textArea);
-                textArea.select();
+            var textArea = document.createElement('textarea');
+            textArea.value = report;
+            document.body.appendChild(textArea);
+            textArea.select();
+            
+            try {
                 document.execCommand('copy');
-                document.body.removeChild(textArea);
                 alert('Report copied to clipboard!');
-            });
+            } catch (e) {
+                alert('Please copy the report manually.');
+            }
+            
+            document.body.removeChild(textArea);
+        }
+
+        function gatherSessionData() {
+            var completed = [];
+            var pending = [];
+            
+            for (var i = 0; i < tasks.length; i++) {
+                if (tasks[i].completed) {
+                    completed.push(tasks[i]);
+                } else {
+                    pending.push(tasks[i]);
+                }
+            }
+            
+            var completedTasks = [];
+            var pendingTasks = [];
+            
+            for (var i = 0; i < completed.length; i++) {
+                completedTasks.push(completed[i].text);
+            }
+            
+            for (var i = 0; i < pending.length; i++) {
+                pendingTasks.push(pending[i].text);
+            }
+            
+            return {
+                date: new Date().toDateString(),
+                timestamp: new Date().toISOString(),
+                focusScore: selectedScore,
+                duration: 25,
+                accomplishments: document.getElementById('accomplishments').value,
+                email: document.getElementById('userEmail').value,
+                tasks: {
+                    total: tasks.length,
+                    completed: completed.length,
+                    pending: pending.length,
+                    completedTasks: completedTasks,
+                    pendingTasks: pendingTasks,
+                    completionRate: tasks.length ? Math.round(completed.length / tasks.length * 100) : 0
+                }
+            };
+        }
+
+        function formatReport(data) {
+            var report = 'FOCUS SESSION REPORT - ' + data.date + '\n\n';
+            report += 'SESSION METRICS:\n';
+            report += 'Focus Score: ' + data.focusScore + '/10\n';
+            report += 'Duration: 25 minutes\n';
+            report += 'Date: ' + new Date(data.timestamp).toLocaleDateString() + '\n';
+            
+            if (data.tasks.total > 0) {
+                report += '\nTASK PROGRESS:\n';
+                report += 'Total Tasks: ' + data.tasks.total + '\n';
+                report += 'Completed: ' + data.tasks.completed + ' (' + data.tasks.completionRate + '%)\n';
+                report += 'Remaining: ' + data.tasks.pending + '\n';
+                
+                report += '\nCOMPLETED TASKS:\n';
+                if (data.tasks.completedTasks.length > 0) {
+                    for (var i = 0; i < data.tasks.completedTasks.length; i++) {
+                        report += '- ' + data.tasks.completedTasks[i] + '\n';
+                    }
+                } else {
+                    report += '- None completed\n';
+                }
+                
+                report += '\nPENDING TASKS:\n';
+                if (data.tasks.pendingTasks.length > 0) {
+                    for (var i = 0; i < data.tasks.pendingTasks.length; i++) {
+                        report += '- ' + data.tasks.pendingTasks[i] + '\n';
+                    }
+                } else {
+                    report += '- All tasks completed!\n';
+                }
+            }
+            
+            report += '\nADDITIONAL ACCOMPLISHMENTS:\n';
+            report += (data.accomplishments || 'No additional accomplishments noted') + '\n';
+            
+            if (data.email) {
+                report += '\nContact: ' + data.email + '\n';
+            }
+            
+            report += '\nGenerated by Edmund Bogen Focus Timer';
+            
+            return report;
+        }
+
+        function sendEmail(data) {
+            var subject = 'Focus Session Report - ' + data.date;
+            var body = formatReport(data);
+            var mailtoLink = 'mailto:edmund@bogenhomes.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+            window.open(mailtoLink);
+        }
+
+        function resetForm() {
+            selectedScore = 0;
+            document.getElementById('accomplishments').value = '';
+            document.getElementById('userEmail').value = '';
+            var options = document.getElementsByClassName('quiz-option');
+            for (var i = 0; i < options.length; i++) {
+                options[i].className = 'quiz-option';
+            }
+        }
+
+        function loadData() {
+            try {
+                var storedTasks = localStorage.getItem('focusTimerTasks');
+                if (storedTasks) {
+                    tasks = JSON.parse(storedTasks);
+                    if (!tasks || typeof tasks.length == 'undefined') {
+                        tasks = [];
+                    }
+                }
+            } catch (e) {
+                tasks = [];
+            }
+        }
+
+        function saveTasks() {
+            try {
+                localStorage.setItem('focusTimerTasks', JSON.stringify(tasks));
+            } catch (e) {
+                // Silent fail
+            }
+        }
+
+        function saveSession(sessionData) {
+            try {
+                var sessions = getSessions();
+                sessions.push(sessionData);
+                localStorage.setItem('focusSessions', JSON.stringify(sessions));
+            } catch (e) {
+                // Silent fail
+            }
+        }
+
+        function getSessions() {
+            try {
+                var data = localStorage.getItem('focusSessions');
+                var sessions = data ? JSON.parse(data) : [];
+                return (sessions && typeof sessions.length != 'undefined') ? sessions : [];
+            } catch (e) {
+                return [];
+            }
         }
 
         function updateStats() {
-            const today = new Date().toDateString();
-            const todaySessions = sessions.filter(s => s.date === today);
+            var sessions = getSessions();
+            var today = new Date().toDateString();
             
-            document.getElementById('sessionsToday').textContent = todaySessions.length;
-            document.getElementById('totalSessions').textContent = sessions.length;
+            var todaySessions = [];
+            for (var i = 0; i < sessions.length; i++) {
+                if (sessions[i].date == today) {
+                    todaySessions.push(sessions[i]);
+                }
+            }
+            document.getElementById('sessionsToday').innerHTML = todaySessions.length;
+            
+            document.getElementById('totalSessions').innerHTML = sessions.length;
             
             if (sessions.length > 0) {
-                const avgScore = sessions.reduce((sum, s) => sum + s.focusScore, 0) / sessions.length;
-                document.getElementById('averageFocus').textContent = avgScore.toFixed(1);
+                var totalScore = 0;
+                for (var i = 0; i < sessions.length; i++) {
+                    totalScore += (sessions[i].focusScore || 0);
+                }
+                var avgScore = totalScore / sessions.length;
+                document.getElementById('averageFocus').innerHTML = avgScore.toFixed(1);
+            } else {
+                document.getElementById('averageFocus').innerHTML = '0';
             }
             
-            // Calculate streak
-            let streak = 0;
-            const dates = [...new Set(sessions.map(s => s.date))].sort((a, b) => new Date(b) - new Date(a));
-            const todayDate = new Date();
+            document.getElementById('streak').innerHTML = calculateStreak(sessions);
+        }
+
+        function calculateStreak(sessions) {
+            if (sessions.length == 0) return 0;
             
-            for (let i = 0; i < dates.length; i++) {
-                const date = new Date(dates[i]);
-                const daysDiff = Math.floor((todayDate - date) / (1000 * 60 * 60 * 24));
+            var uniqueDates = [];
+            for (var i = 0; i < sessions.length; i++) {
+                var found = false;
+                for (var j = 0; j < uniqueDates.length; j++) {
+                    if (uniqueDates[j] == sessions[i].date) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    uniqueDates.push(sessions[i].date);
+                }
+            }
+            
+            uniqueDates.sort(function(a, b) {
+                return new Date(b) - new Date(a);
+            });
+            
+            var today = new Date();
+            var streak = 0;
+            
+            for (var i = 0; i < uniqueDates.length; i++) {
+                var date = new Date(uniqueDates[i]);
+                var daysDiff = Math.floor((today - date) / (1000 * 60 * 60 * 24));
                 
-                if (daysDiff === i) {
+                if (daysDiff == i) {
                     streak++;
                 } else {
                     break;
                 }
             }
             
-            document.getElementById('streak').textContent = streak;
+            return streak;
         }
 
-        // Initialize display
-        updateDisplay();
+        // Initialize when DOM is ready
+        if (document.addEventListener) {
+            document.addEventListener('DOMContentLoaded', initApp);
+        } else if (document.attachEvent) {
+            document.attachEvent('onreadystatechange', function() {
+                if (document.readyState == 'complete') {
+                    initApp();
+                }
+            });
+        } else {
+            window.onload = initApp;
+        }
     </script>
 </body>
 </html>
